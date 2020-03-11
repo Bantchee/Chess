@@ -1,49 +1,5 @@
 from Components.board import Board as brd
 
-"""def startGame():
-    while True:
-        for char in b.columns:
-             print(" ", char, end = "")
-        print()
-
-        for row in b.getBoard():
-            print(b.getBoard().index(row) + 1, end = " ")
-            for sqr in row:
-                print(sqr, end = " ")
-            print()
-
-        origin = str(input("White, where is the piece you want to move: "))
-
-        while not b.pieceAtSquare(origin):
-            print("Try again.")
-            origin = str(input("White, where is the piece you want to move: "))
-    
-        destination = str(input("White, where do you want to move the piece: "))
-
-        while not b.possibleMove(origin, destination):
-            destination = str(input("White, where do you want to move the piece: "))
-
-        origin = b.getPositionOfSquare(origin)
-        destination = b.getPositionOfSquare(destination)
-
-        b.movePiece(origin, destination)
-
-        quit = str(input("Quit? yes or no: "))
-
-        if quit == "yes":
-            print("Black wins!")
-            for char in b.columns:
-                print(" ", char, end = "")
-            print()
-
-            for row in b.getBoard():
-                print(b.getBoard().index(row) + 1, end = " ")
-                for sqr in row:
-                    print(sqr, end = " ")
-                print()
-            break"""
-
-
 def dialogueTree(player):
     first_message = str(input("\nPlayer " + player + " - type 'move', 'captured pieces', or 'forfeit': ")).lower()
     
