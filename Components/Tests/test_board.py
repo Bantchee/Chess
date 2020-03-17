@@ -83,13 +83,13 @@ class TestBoard(unittest.TestCase):
 
     def test_movePiece(self):
         # pawn
-        self.brd.movePiece(position.Position(1, 1), position.Position(0, 2))
+        self.brd.movePiece('black', position.Position(1, 1), position.Position(0, 2))
         self.assertIsInstance(self.brd.getSquare(0, 2).getPiece(), pieces.Pawn)
 
-        self.brd.movePiece(position.Position(0, 2), position.Position(0, 3))
+        self.brd.movePiece('black', position.Position(0, 2), position.Position(0, 3))
         self.assertIsInstance(self.brd.getSquare(0, 3).getPiece(), pieces.Pawn)
 
-        self.brd.movePiece(position.Position(0, 3), position.Position(1, 4))
+        self.brd.movePiece('white', position.Position(0, 3), position.Position(1, 4))
         self.assertIsInstance(self.brd.getSquare(1, 4).getPiece(), pieces.Pawn)
 
 if __name__ == '__main__':

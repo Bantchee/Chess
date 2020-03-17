@@ -14,16 +14,16 @@ class Board(object):
 
     def getBoard(self):
         return self.board
-    def getCapturedPieces(self, player):
-        if player == 'white':
+    def getCapturedPieces(self, color):
+        if color == 'white':
             return self.white_captured_pieces
         else:
             return self.black_captured_pieces
-    def addCapturedPiece(self, player, piece):
-        if player == 'white':
-            self.getCapturedPieces(player).append(piece)
+    def addCapturedPiece(self, piece):
+        if piece.getColor() == 'white':
+            self.getCapturedPieces('white').append(piece.__str__())
         else:
-            self.getCapturedPieces(player).append(piece)
+            self.getCapturedPieces('black').append(piece.__str__())
     def removeCapturedPiece(self, player, piece):
         if player == 'white':
             self.getCapturedPieces(player).remove(piece)
@@ -81,7 +81,7 @@ class Board(object):
         self.getSquare(6, 1).setPiece(Pawn("black", 6, 1))
         self.getSquare(7, 1).setPiece(Pawn("black", 7, 1))
         
-    def pieceAtSquare(self, str_pos):
+    def pieceAtSquare(self, player, str_pos):
         """Board String -> Boolean
         if str_pos is less than 3 characters,
         if 1 character in str_pos is in [1, 2, 3, 4, 5, 6, 7, 8],
@@ -95,19 +95,27 @@ class Board(object):
                 
                 if (str_pos[1] in self.columns) or (str_pos[1] in self.rows):
                     pos = self.getPositionOfSquare(str_pos)
+
+                    if self.getSquare(pos.getX(), pos.getY()).getPiece().getColor() == player:
             
-                    if isinstance(self.board[pos.getY()][pos.getX()].getPiece(), Piece):
-                        temp_piece = self.board[pos.getY()][pos.getX()].getPiece()
-                        
-                        temp_piece.setMoves(temp_piece.generateNewMoves())
+                        if isinstance(self.board[pos.getY()][pos.getX()].getPiece(), Piece):
+                            temp_piece = self.board[pos.getY()][pos.getX()].getPiece()
+                            
+                            temp_piece.setMoves(temp_piece.generateNewMoves())
 
-                        print("Piece", temp_piece, "at [" + str(pos.getX()), str(pos.getY()) + "]")
-                        print("Possible moves: ", end = "")
-                        for move in temp_piece.getMoves():
-                            print(self.columns[move.getX()] + self.rows[move.getY()] + " ", end = "")
-                        print()
+                            print("Piece", temp_piece, "at [" + str(pos.getX()), str(pos.getY()) + "]")
+                            print("Possible moves: ", end = "")
+                            for move in temp_piece.getMoves():
+                                print(self.columns[move.getX()] + self.rows[move.getY()] + " ", end = "")
+                            print()
 
-                        return True
+                            return True
+                        else:
+                            # there is not a piece at that square
+                            return False
+                    else:
+                        # trying to move the other player's piece
+                        return False
                 else:
                     # print("Index 1 of", str_pos, "is not in", self.columns, "or", self.rows)
                     return False
@@ -119,7 +127,7 @@ class Board(object):
             return False
 
     def possibleMove(self, origin, destination):
-        """Board String String -> Boolean, Return true if destination is a possible move for Piece at origin"""
+        """Board String String String -> Boolean, Return true if destination is a possible move for Piece at origin"""
         if len(destination) < 3:
             
             if (destination[0] in self.columns) or (destination[0] in self.rows):
@@ -179,13 +187,33 @@ class Board(object):
         piece = self.board[origin.getY()][origin.getX()].getPiece()
         piece.setPosition(destination.getX(), destination.getY())
 
-        if isinstance(self.board[destination.getY()][destination.getX()], Piece):
-            self.addCapturedPiece(player, board[destination.getY()][destination.getX()].getPiece().__str__())
+        if isinstance(self.board[destination.getY()][destination.getX()].getPiece(), Piece):
+            self.addCapturedPiece(self.board[destination.getY()][destination.getX()].getPiece())
             self.board[destination.getY()][destination.getX()].setPiece(piece)
             self.board[origin.getY()][origin.getX()].setPiece("--")
         else:
             self.board[destination.getY()][destination.getX()].setPiece(piece)
             self.board[origin.getY()][origin.getX()].setPiece("--")
+
+    def generateMoves(self, piece):
+        """Board Piece -> [List-of Positions]"""
+        def generateKingsMoves():
+            return []
+
+        list_of_positions = []
+
+        if isinstance(piece, Piece.King):
+            return generateKingsMoves()
+        elif isinstance(piece, Piece.Queen):
+            return list_of_positions
+        elif isinstance(piece, Piece.Bishop):
+            return list_of_positions
+        elif isinstance(piece, Piece.Rook):
+            return list_of_positions
+        elif isinstance(piece, Piece.Knight):
+            return list_of_positions
+        elif isinstance(piece, Piece.Pawn):
+            return list_of_positions
 
 class Square(object):
     def __init__(self, x, y):

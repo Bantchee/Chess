@@ -1,62 +1,67 @@
 from Components.board import Board as brd
 
 def dialogueTree(player):
-    first_message = str(input("\nPlayer " + player + " - type 'move', 'captured pieces', or 'forfeit': ")).lower()
+    first_message = str(input("\nPlayer " + player + " - type 'move', 'captured pieces', or 'quit': ")).lower()
     
     if first_message == 'move':
-        movementDialogue(player)
+        return movementDialogue(player)
 
     elif first_message == 'captured pieces':
-        capturedPiecesDialogue(player)
+        return capturedPiecesDialogue(player)
 
-    elif first_message == 'forfeit':
-        forfeitDialogue(player)
-        return 'quit'
+    elif first_message == 'quit':
+        return quitDialogue(player)
     else:
-        print("\nWrong input, try again.\n")
-        dialogueTree(player)
+        print("\nWrong input, try again.")
+        return dialogueTree(player)
 
 def movementDialogue(player):
     origin = str(input("\nType in the location of the piece you want to move or type 'back': ")).lower()
 
-    if b.pieceAtSquare(origin):
+    if b.pieceAtSquare(player, origin):
         destination = str(input("\nType in where you want to move the piece or type 'back': ")).lower()
         
         if b.possibleMove(origin, destination):
             origin = b.getPositionOfSquare(origin)
             destination = b.getPositionOfSquare(destination)
             b.movePiece(player, origin, destination)
-        
+            return False
+
         elif destination == 'back':
-            dialogueTree(player)
+            return dialogueTree(player)
         
         else:
-            print("\nTry again\n")
-            movementDialogue(player)
+            print("\nTry again")
+            return movementDialogue(player)
     
     elif origin == 'back':
-        dialogueTree(player)
+        return dialogueTree(player)
     
     else:
-        print("\nTry again\n")
-        movementDialogue(player)
+        print("\nTry again")
+        return movementDialogue(player)
 
 def capturedPiecesDialogue(player):
-    print(b.getCapturedPieces(player))
-    dialogueTree(player)
+    if player == 'white':
+        print(b.getCapturedPieces('black'))
+    else:
+        print(b.getCapturedPieces('white'))
+    return dialogueTree(player)
 
-def forfeitDialogue(player):
+def quitDialogue(player):
     if player == 'white':
         print('\nPlayer black wins!')
     else:
-        print('\nPlayer white wins!')    
+        print('\nPlayer white wins!')
+    return True
     # print captured pieces at end
-    
-    
 
 def startGame():
-    while True:
+    quit = False
+    while not quit:
         
+        print()
+
         # White player's turn
         # print updated board
         for char in b.columns:
@@ -68,12 +73,12 @@ def startGame():
             for sqr in row:
                 print(sqr, end = " ")
             print()
-        print()
 
         # Dialogue tree for player white
         # not working
-        if dialogueTree('white') == 'quit':
-            break
+        if dialogueTree('white'):
+            quit = True
+            continue
 
         # Black player's turn
         # print updated board
@@ -86,11 +91,11 @@ def startGame():
             for sqr in row:
                 print(sqr, end = " ")
             print()
-        print()
 
         # Dialogue tree for player black
-        if dialogueTree('black') == 'quit':
-            break
+        if dialogueTree('black'):
+            quit = True
+            continue
 
 b = brd()
 
