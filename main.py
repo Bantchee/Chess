@@ -1,5 +1,6 @@
 from Components.board import Board as brd
 
+# coolness
 def dialogueTree(player):
     first_message = str(input("\nPlayer " + player + " - type 'move', 'captured pieces', or 'quit': ")).lower()
     
