@@ -80,7 +80,10 @@ class Board(object):
         self.getSquare(5, 1).setPiece(Pawn("black", 5, 1))
         self.getSquare(6, 1).setPiece(Pawn("black", 6, 1))
         self.getSquare(7, 1).setPiece(Pawn("black", 7, 1))
-        
+
+        #test
+        self.getSquare(0, 4).setPiece(Knight("white", 0, 4))
+
     def pieceAtSquare(self, player, str_pos):
         """Board String -> Boolean
         if str_pos is less than 3 characters,
@@ -99,13 +102,13 @@ class Board(object):
                     if self.getSquare(pos.getX(), pos.getY()).getPiece().getColor() == player:
             
                         if isinstance(self.board[pos.getY()][pos.getX()].getPiece(), Piece):
-                            temp_piece = self.board[pos.getY()][pos.getX()].getPiece()
+                            alias_piece = self.board[pos.getY()][pos.getX()].getPiece()
                             
-                            temp_piece.setMoves(temp_piece.generateNewMoves())
+                            alias_piece.setMoves(alias_piece.generateNewMoves(self))
 
-                            print("Piece", temp_piece, "at [" + str(pos.getX()), str(pos.getY()) + "]")
+                            print("Piece", alias_piece, "at [" + str(pos.getX()), str(pos.getY()) + "]")
                             print("Possible moves: ", end = "")
-                            for move in temp_piece.getMoves():
+                            for move in alias_piece.getMoves():
                                 print(self.columns[move.getX()] + self.rows[move.getY()] + " ", end = "")
                             print()
 
@@ -194,26 +197,6 @@ class Board(object):
         else:
             self.board[destination.getY()][destination.getX()].setPiece(piece)
             self.board[origin.getY()][origin.getX()].setPiece("--")
-
-    def generateMoves(self, piece):
-        """Board Piece -> [List-of Positions]"""
-        def generateKingsMoves():
-            return []
-
-        list_of_positions = []
-
-        if isinstance(piece, Piece.King):
-            return generateKingsMoves()
-        elif isinstance(piece, Piece.Queen):
-            return list_of_positions
-        elif isinstance(piece, Piece.Bishop):
-            return list_of_positions
-        elif isinstance(piece, Piece.Rook):
-            return list_of_positions
-        elif isinstance(piece, Piece.Knight):
-            return list_of_positions
-        elif isinstance(piece, Piece.Pawn):
-            return list_of_positions
 
 class Square(object):
     def __init__(self, x, y):

@@ -6,199 +6,265 @@ class Piece(object):
         self.name = name
         self.position = Position(x, y)
         self.moves = []
-    def getColor(self):
-        return self.color
-    def setColor(self, newColor):
-        self.color = newColor
-    def getName(self):
-        return self.name
-    def setName(self, newName):
-        self.name = newName
-    def getPosition(self):
-        return self.position
-    def setPosition(self, x, y):
-        self.position = Position(x, y)
-    def getMoves(self):
-        return self.moves
-    def setMoves(self, list_of_positions):
-        self.moves = list_of_positions
+
     def __str__(self):
         return str(self.color[0] + self.name[0])
+
+    def getColor(self):
+        return self.color
+
+    def setColor(self, newColor):
+        self.color = newColor
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getPosition(self):
+        return self.position
+
+    def setPosition(self, x, y):
+        self.position = Position(x, y)
+
+    def getMoves(self):
+        return self.moves
+
+    def setMoves(self, list_of_positions):
+        self.moves = list_of_positions
+
+    def generateMoves(self, board, moves, num):
+        """
+        Piece Board String Numbers -> [List-of Positions]
+        generates a list of positions, which are moves that a piece can make
+        """
+        lst_of_pos = []
+
+        x = self.getPosition().getX()
+        y = self.getPosition().getY()
+
+        if 'pawn' in moves:
+            if self.getColor() in 'white':
+                # move forward 1
+                if isinstance(board.getSquare(x, y - 1).getPiece(), str):
+                    lst_of_pos.append(Position(x, y - 1))
+                    # initial two-square advance
+                    if y == 6 and isinstance(board.getSquare(x, y - 2).getPiece(), str):
+                        lst_of_pos.append(Position(x, y - 2))
+                
+                # attack piece up left
+                if isinstance(board.getSquare(x - 1, y - 1).getPiece(), Piece):
+                    lst_of_pos.append(Position(x - 1, y - 1))
+                
+                # attack piece up right
+                if isinstance(board.getSquare(x + 1, y - 1).getPiece(), Piece):
+                    lst_of_pos.append(Position(x + 1, y - 1))
+            
+            else:
+                # move up 1 square
+                if isinstance(board.getSquare(x, y + 1).getPiece(), str):
+                    lst_of_pos.append(Position(x, y + 1))
+                    # initial 2 square advance
+                    if y == 1 and isinstance(board.getSquare(x, y + 2).getPiece(), str):
+                        lst_of_pos.append(Position(x, y + 2))
+                
+                # attack piece up left
+                if isinstance(board.getSquare(x - 1, y + 1).getPiece(), Piece):
+                    lst_of_pos.append(Position(x - 1, y + 1))
+                
+                # attack piece up right
+                if isinstance(board.getSquare(x + 1, y + 1).getPiece(), Piece):
+                    lst_of_pos.append(Position(x + 1, y + 1))
+
+        if 'knight' in moves:
+            # down 1 right 3
+            if (x + 3 <= 7) and (y + 1 <= 7):
+                if isinstance(board.getSquare(x + 3, y + 1).getPiece(), str):
+                    lst_of_pos.append(Position(x + 3, y + 1))
+                elif self.getColor() != board.getSquare(x + 3, y + 1).getPiece().getColor():
+                    lst_of_pos.append(Position(x + 3, y + 1))
+            # up 1 right 3
+            if (x + 3 <= 7) and (y - 1 >= 0):
+                if isinstance(board.getSquare(x + 3, y - 1).getPiece(), str):
+                    lst_of_pos.append(Position(x + 3, y - 1))
+                elif self.getColor() != board.getSquare(x + 3, y - 1).getPiece().getColor():
+                    lst_of_pos.append(Position(x + 3, y - 1))
+            # down 1 left 3
+            if (x - 3 >= 0) and (y + 1 <= 7):
+                if isinstance(board.getSquare(x - 3, y + 1).getPiece(), str):
+                    lst_of_pos.append(Position(x - 3, y + 1))
+                elif self.getColor() != board.getSquare(x - 3, y + 1).getPiece().getColor():
+                    lst_of_pos.append(Position(x - 3, y + 1))
+            # up 1 left 3
+            if (x - 3 >= 0) and (y - 1 >= 0):
+                if isinstance(board.getSquare(x - 3, y - 1).getPiece(), str):
+                    lst_of_pos.append(Position(x - 3, y - 1))
+                elif self.getColor() != board.getSquare(x - 3, y - 1).getPiece().getColor():
+                    lst_of_pos.append(Position(x - 3, y - 1))
+            # down 3 right 1
+            if (x + 1 <= 7) and (y + 3 <= 7):
+                if isinstance(board.getSquare(x + 1, y + 3).getPiece(), str):
+                    lst_of_pos.append(Position(x + 1, y + 3))
+                elif self.getColor() != board.getSquare(x + 1, y + 3).getPiece().getColor():
+                    lst_of_pos.append(Position(x + 1, y + 3))
+            # up 3 right 1
+            if (x + 1 <= 7) and (y - 3 >= 0):
+                if isinstance(board.getSquare(x + 1, y - 3).getPiece(), str):
+                    lst_of_pos.append(Position(x + 1, y - 3))
+                elif self.getColor() != board.getSquare(x + 1, y - 3).getPiece().getColor():
+                    lst_of_pos.append(Position(x + 1, y - 3))
+            # down 3 left 1
+            if (x - 1 >= 0) and (y + 3 <= 7):
+                if isinstance(board.getSquare(x - 1, y + 3).getPiece(), str):
+                    lst_of_pos.append(Position(x - 1, y + 3))
+                elif self.getColor() != board.getSquare(x - 1, y + 3).getPiece().getColor():
+                    lst_of_pos.append(Position(x - 1, y + 3))
+            # up 3 left 1
+            if (x - 1 >= 0) and (y - 3 >= 0):
+                if isinstance(board.getSquare(x - 1, y - 3).getPiece(), str):
+                    lst_of_pos.append(Position(x - 1, y - 3))
+                elif self.getColor() != board.getSquare(x - 1, y - 3).getPiece().getColor():
+                    lst_of_pos.append(Position(x - 1, y - 3))
+        
+        else: 
+            if 'up' in moves:
+                for val in range(1, num + 1):
+                    if y - val >= 0:
+                        square = board.getSquare(x, y - val)
+                        if isinstance(square.getPiece(), str):
+                            lst_of_pos.append(Position(x, y - val))
+                            continue
+                        elif square.getPiece().getColor() != self.getColor():
+                            lst_of_pos.append(Position(x, y - val))
+                        break
+            
+            if 'down' in moves:
+                for val in range(1, num + 1):
+                    if y + val <= 7:
+                        square = board.getSquare(x, y + val)
+                        if isinstance(square.getPiece(), str):
+                            lst_of_pos.append(Position(x, y + val))
+                            continue
+                        elif square.getPiece().getColor() != self.getColor():
+                            lst_of_pos.append(Position(x, y + val))
+                        break
+            
+            if 'left' in moves:
+                for val in range(1, num + 1):
+                    if x - val >= 0:
+                        square = board.getSquare(x - val, y)
+                        if isinstance(square.getPiece(), str):
+                            lst_of_pos.append(Position(x - val, y))
+                            continue
+                        elif square.getPiece().getColor() != self.getColor():
+                            lst_of_pos.append(Position(x - val, y))
+                        break
+            
+            if 'right' in moves:
+                for val in range(1, num + 1):
+                    if x + val <= 7:
+                        square = board.getSquare(x + val, y)
+                        if isinstance(square.getPiece(), str):
+                            lst_of_pos.append(Position(x + val, y))
+                            continue
+                        elif square.getPiece().getColor() != self.getColor():
+                            lst_of_pos.append(Position(x + val, y))
+                        break
+            
+            if 'up-left' in moves:
+                for val in range(1, num + 1):
+                    if x - val >= 0 and y - val >= 0:
+                        square = board.getSquare(x - val, y - val)
+                        if isinstance(square.getPiece(), str):
+                            lst_of_pos.append(Position(x - val, y - val))
+                            continue
+                        elif square.getPiece().getColor() != self.getColor():
+                            lst_of_pos.append(Position(x - val, y - val))
+                        break
+            
+            if 'down-left' in moves:
+                for val in range(1, num + 1):
+                    if x + val <= 7 and y - val >= 0:
+                        square = board.getSquare(x + val, y - val)
+                        if isinstance(square.getPiece(), str):
+                            lst_of_pos.append(Position(x + val, y - val))
+                            continue
+                        elif square.getPiece().getColor() != self.getColor():
+                            lst_of_pos.append(Position(x + val, y - val))
+                        break
+            
+            if 'up-right' in moves:
+                for val in range(1, num + 1):
+                    if x - val >= 0 and y + val <= 7:
+                        square = board.getSquare(x - val, y + val)
+                        if isinstance(square.getPiece(), str):
+                            lst_of_pos.append(Position(x - val, y + val))
+                            continue
+                        elif square.getPiece().getColor() != self.getColor():
+                            lst_of_pos.append(Position(x - val, y + val))
+                        break
+            
+            if 'down-right' in moves:
+                for val in range(1, num + 1):
+                    if x + val <= 7 and y + val <= 7:
+                        square = board.getSquare(x + val, y + val)
+                        if isinstance(square.getPiece(), str):
+                            lst_of_pos.append(Position(x + val, y + val))
+                            continue
+                        elif square.getPiece().getColor() != self.getColor():
+                            lst_of_pos.append(Position(x + val, y + val))
+                        break
+
+        return lst_of_pos
  
 class King(Piece):
     def __init__(self, color, x, y):
         super().__init__(color, 'king', x, y)
-        self.setMoves(self.generateNewMoves())
 
-    def generateNewMoves(self):
+    def generateMoves(self, board):
         """
-        King -> [List-of Positons]
+        King Board -> [List-of Positons]
 
         generates a list of positions that self can move to.
         """
-        lst = []
-
-        # Front
-        if self.getPosition().getY() > 0:
-            # Front Left
-            if self.getPosition().getX() > 0:
-                lst.append(Position(self.getPosition().getX() - 1, self.getPosition().getY() - 1))
-
-            lst.append(Position(self.getPosition().getX(), self.getPosition().getY() - 1))
-
-            # Front Right
-            if self.getPosition().getX() < 7:
-                lst.append(Position(self.getPosition().getX() + 1, self.getPosition().getY() - 1))
-
-        # Right
-        if self.getPosition().getX() < 7:
-            lst.append(Position(self.getPosition().getX() + 1, self.getPosition().getY()))
-
-        # Back
-        if self.getPosition().getY() < 7:
-            # Front Right
-            if self.getPosition().getX() < 7:
-                lst.append(Position(self.getPosition().getX() + 1, self.getPosition().getY() + 1))
-                
-            lst.append(Position(self.getPosition().getX(), self.getPosition().getY() + 1))
-
-            # Front Left
-            if self.getPosition().getX() > 0:
-                lst.append(Position(self.getPosition().getX() - 1, self.getPosition().getY() + 1))
-
-        # Left
-        if self.getPosition().getX() > 0:
-            lst.append(Position(self.getPosition().getX() - 1, self.getPosition().getY()))
-
-        return lst
+        return super().generateMoves(board, 'up down left right up-left up-right down-left down-right', 1)
 
 class Queen(Piece):
     def __init__(self, color, x, y):
         super().__init__(color, 'queen', x, y)
-        self.setMoves(self.generateNewMoves())
 
-    def generateNewMoves(self):
+    def generateNewMoves(self, board):
         """
-        Queen -> [List-of Positons]
+        Queen Board -> [List-of Positons]
 
         generates a list of positions that self can move to.
         """
-        lst = []
-        
-        for i in range(1, 8):
-            # Front
-            if self.getPosition().getY() - i >= 0:
-                # Front Left
-                if self.getPosition().getX() - i >= 0:
-                    lst.append(Position(self.getPosition().getX() - i, self.getPosition().getY() - i))
-
-                lst.append(Position(self.getPosition().getX(), self.getPosition().getY() - i))
-    
-                # Front Right
-                if self.getPosition().getX() + i <= 7:
-                    lst.append(Position(self.getPosition().getX() + i, self.getPosition().getY() - i))
-
-            # Right
-            if self.getPosition().getX() + i <= 7:
-                lst.append(Position(self.getPosition().getX() + i, self.getPosition().getY()))
-
-            # Back ------
-            if self.getPosition().getY() + i <= 7:
-                # Front Right
-                if self.getPosition().getX() + i <= 7:
-                    lst.append(Position(self.getPosition().getX() + i, self.getPosition().getY() + i))
-                
-                lst.append(Position(self.getPosition().getX(), self.getPosition().getY() + i))
-
-                # Front Left
-                if self.getPosition().getX() - i >= 0:
-                    lst.append(Position(self.getPosition().getX() - i, self.getPosition().getY() + i))
-
-            # Left
-            if self.getPosition().getX() - i >= 0:
-                lst.append(Position(self.getPosition().getX() - i, self.getPosition().getY()))
-
-        return lst
+        return super().generateMoves(board, 'up down left, right up-left up-right down-left down-right', 7)
 
 class Bishop(Piece):
     def __init__(self, color, x, y):
         super().__init__(color, 'bishop', x, y)
-        self.setMoves(self.generateNewMoves())
 
-    def generateNewMoves(self):
+    def generateNewMoves(self, board):
         """
-        Bishop -> [List-of Positons]
+        Bishop Board -> [List-of Positons]
 
         generates a list of positions that self can move to.
         """
-        lst = []
-
-        for value in range(1, 8):
-            if self.getColor() == 'white':
-                if (self.getPosition().getX() + value <= 7) and (self.getPosition().getY() + value <= 7):
-                    lst.append(Position(self.getPosition().getX() + value, self.getPosition().getY() + value))
-                
-                if (self.getPosition().getX() - value >= 0) and (self.getPosition().getY() + value <= 7):
-                    lst.append(Position(self.getPosition().getX() - value, self.getPosition().getY() + value))
-
-                if (self.getPosition().getX() + value <= 7) and (self.getPosition().getY() - value >= 0):
-                    lst.append(Position(self.getPosition().getX() + value, self.getPosition().getY() - value))
-
-                if (self.getPosition().getX() - value >= 0) and (self.getPosition().getY() - value >= 0):
-                    lst.append(Position(self.getPosition().getX() - value, self.getPosition().getY() - value))
-            else: 
-                if (self.getPosition().getX() + value <= 7) and (self.getPosition().getY() + value <= 7):
-                    lst.append(Position(self.getPosition().getX() + value, self.getPosition().getY() + value))
-                
-                if (self.getPosition().getX() - value >= 0) and (self.getPosition().getY() + value <= 7):
-                    lst.append(Position(self.getPosition().getX() - value, self.getPosition().getY() + value))
-
-                if (self.getPosition().getX() + value <= 7) and (self.getPosition().getY() - value >= 0):
-                    lst.append(Position(self.getPosition().getX() + value, self.getPosition().getY() - value))
-
-                if (self.getPosition().getX() - value >= 0) and (self.getPosition().getY() - value >= 0):
-                    lst.append(Position(self.getPosition().getX() - value, self.getPosition().getY() - value))
-
-        return lst
+        return super().generateMoves(board, 'up-left up-right down-left down-right', 7)
             
 class Knight(Piece):
     def __init__(self, color, x, y):
         super().__init__(color, 'knight', x, y)
-        self.setMoves(self.generateNewMoves())
 
-    def generateNewMoves(self):
+    def generateNewMoves(self, board):
         """
-        King -> [List-of Positons]
+        King Board -> [List-of Positons]
 
         generates a list of positions that self can move to.
         """
-        lst = []
-
-        if (self.getPosition().getX() + 3 <= 7) and (self.getPosition().getY() + 1 <= 7):
-            lst.append(Position(self.getPosition().getX() + 3, self.getPosition().getY() + 1))
-        
-        if (self.getPosition().getX() + 3 <= 7) and (self.getPosition().getY() - 1 >= 0):
-            lst.append(Position(self.getPosition().getX() + 3, self.getPosition().getY() - 1))
-        
-        if (self.getPosition().getX() - 3 >= 0) and (self.getPosition().getY() + 1 <= 7):
-            lst.append(Position(self.getPosition().getX() - 3, self.getPosition().getY() + 1))
-        
-        if (self.getPosition().getX() - 3 >= 0) and (self.getPosition().getY() - 1 >= 0):
-            lst.append(Position(self.getPosition().getX() - 3, self.getPosition().getY() - 1))
-        
-        if (self.getPosition().getX() + 1 <= 7) and (self.getPosition().getY() + 3 <= 7):
-            lst.append(Position(self.getPosition().getX() + 1, self.getPosition().getY() + 3))
-        
-        if (self.getPosition().getX() + 1 <= 7) and (self.getPosition().getY() - 3 >= 0):
-            lst.append(Position(self.getPosition().getX() + 1, self.getPosition().getY() - 3))
-        
-        if (self.getPosition().getX() - 1 >= 0) and (self.getPosition().getY() + 3 <= 7):
-            lst.append(Position(self.getPosition().getX() - 1, self.getPosition().getY() + 3))
-        
-        if (self.getPosition().getX() - 1 >= 0) and (self.getPosition().getY() - 3 >= 0):
-            lst.append(Position(self.getPosition().getX() - 1, self.getPosition().getY() - 3))
-
-        return lst
+        return super().generateMoves(board, 'knight', 1)
     
     def __str__(self):
         return str(self.color[0] + self.name[1])
@@ -206,64 +272,23 @@ class Knight(Piece):
 class Rook(Piece):
     def __init__(self, color, x, y):
         super().__init__(color, 'rook', x, y)
-        self.setMoves(self.generateNewMoves())
 
-    def generateNewMoves(self):
+    def generateNewMoves(self, board):
         """
-        King -> [List-of Positons]
+        King Board -> [List-of Positons]
 
         generates a list of positions that self can move to.
         """
-        lst = []
-
-        for value in range(1, 8):
-            if self.getColor() == 'white':
-                if self.getPosition().getX() + value <= 7:
-                    lst.append(Position( self.getPosition().getX() + value, self.getPosition().getY()))
-                if self.getPosition().getX() - value >= 0:
-                    lst.append(Position( self.getPosition().getX() - value, self.getPosition().getY()))
-                if self.getPosition().getY() + value <= 7:
-                    lst.append(Position( self.getPosition().getX(), self.getPosition().getY() + value))
-                if self.getPosition().getY() - value >= 0:
-                    lst.append(Position( self.getPosition().getX(), self.getPosition().getY() - value))
-            else:
-                if self.getPosition().getX() + value <= 7:
-                    lst.append(Position( self.getPosition().getX() + value, self.getPosition().getY()))
-                if self.getPosition().getX() - value >= 0:
-                    lst.append(Position( self.getPosition().getX() - value, self.getPosition().getY()))
-                if self.getPosition().getY() + value <= 7:
-                    lst.append(Position( self.getPosition().getX(), self.getPosition().getY() + value))
-                if self.getPosition().getY() - value >= 0:
-                    lst.append(Position( self.getPosition().getX(), self.getPosition().getY() - value))
-        
-        return lst
+        return super().generateMoves(board, 'up down left right', 7)
 
 class Pawn(Piece):
     def __init__(self, color, x, y):
         super().__init__(color, 'pawn', x, y)
-        self.setMoves(self.generateNewMoves())
 
-    def generateNewMoves(self):
+    def generateNewMoves(self, board):
         """
-        Pawn -> [List-of Positons]
+        Pawn Board -> [List-of Positons]
 
         generates a list of positions that self can move to.
         """
-        lst = []
-        
-        if self.getColor() == "white":
-            if self.getPosition().getY() < 7:
-                if 0 < self.getPosition().getX():
-                    lst.append(Position(self.getPosition().getX() - 1, self.getPosition().getY() - 1))
-                lst.append(Position(self.getPosition().getX(), self.getPosition().getY() - 1))
-                if self.getPosition().getX() < 7:
-                    lst.append(Position(self.getPosition().getX() + 1, self.getPosition().getY() - 1))
-        elif self.getColor() == 'black':
-            if self.getPosition().getY() < 7:
-                if 0 < self.getPosition().getX():
-                    lst.append(Position(self.getPosition().getX() - 1, self.getPosition().getY() + 1))
-                lst.append(Position(self.getPosition().getX(), self.getPosition().getY() + 1))
-                if self.getPosition().getX() < 7:
-                    lst.append(Position(self.getPosition().getX() + 1, self.getPosition().getY() + 1))
-
-        return lst
+        return super().generateMoves(board, 'pawn', 1)
