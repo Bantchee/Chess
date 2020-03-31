@@ -81,9 +81,6 @@ class Board(object):
         self.getSquare(6, 1).setPiece(Pawn("black", 6, 1))
         self.getSquare(7, 1).setPiece(Pawn("black", 7, 1))
 
-        #test
-        self.getSquare(0, 4).setPiece(Knight("white", 0, 4))
-
     def pieceAtSquare(self, player, str_pos):
         """Board String -> Boolean
         if str_pos is less than 3 characters,

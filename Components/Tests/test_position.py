@@ -25,6 +25,32 @@ class TestPosition(unittest.TestCase):
         print('tearDown\n')
         """runs code after every single test"""
         pass
+
+    def test_getX(self):
+        self.assertEqual(self.pos_1.getX(), 0)
+        self.assertEqual(self.pos_2.getX(), 2)
+        self.assertEqual(self.pos_3.getX(), 1)
+    
+    def test_setX(self):
+        self.pos_1.setX(3)
+        self.assertEqual(self.pos_1.getX(), 3)
+        self.pos_2.setX(-2)
+        self.assertEqual(self.pos_2.getX(), -2)
+        self.pos_3.setX(6)
+        self.assertEqual(self.pos_3.getX(), 6)
+    
+    def test_getY(self):
+        self.assertEqual(self.pos_1.getY(), 0)
+        self.assertEqual(self.pos_2.getY(), 3)
+        self.assertEqual(self.pos_3.getY(), -5)
+
+    def test_setY(self):
+        self.pos_1.setX(-3)
+        self.assertEqual(self.pos_1.getX(), -3)
+        self.pos_2.setX(0)
+        self.assertEqual(self.pos_2.getX(), 0)
+        self.pos_3.setX(4)
+        self.assertEqual(self.pos_3.getX(), 4)
         
     def test_isPositionInList(self):
         print('test_isPositionInList')

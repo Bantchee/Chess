@@ -258,6 +258,9 @@ class Knight(Piece):
     def __init__(self, color, x, y):
         super().__init__(color, 'knight', x, y)
 
+    def __str__(self):
+        return str(self.color[0] + self.name[1])
+
     def generateNewMoves(self, board):
         """
         King Board -> [List-of Positons]
@@ -265,9 +268,6 @@ class Knight(Piece):
         generates a list of positions that self can move to.
         """
         return super().generateMoves(board, 'knight', 1)
-    
-    def __str__(self):
-        return str(self.color[0] + self.name[1])
 
 class Rook(Piece):
     def __init__(self, color, x, y):
