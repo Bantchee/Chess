@@ -1,5 +1,6 @@
 from .position import Position
 from .pieces import *
+from .square import *
 
 class Board(object):
     columns = "abcdefgh"
@@ -46,40 +47,40 @@ class Board(object):
             self.getBoard().append(lst)
 
         # White
-        self.getSquare(0, 7).setPiece(Rook("white", 0, 7))
-        self.getSquare(1, 7).setPiece(Knight("white", 1, 7))
-        self.getSquare(2, 7).setPiece(Bishop("white", 2, 7))
-        self.getSquare(3, 7).setPiece(King("white",  3, 7))
-        self.getSquare(4, 7).setPiece(Queen("white", 4, 7))
-        self.getSquare(5, 7).setPiece(Bishop("white", 5, 7))
-        self.getSquare(6, 7).setPiece(Knight("white", 6, 7))
-        self.getSquare(7, 7).setPiece(Rook("white", 7, 7))
-        self.getSquare(0, 6).setPiece(Pawn("white", 0, 6))
-        self.getSquare(1, 6).setPiece(Pawn("white", 1, 6))
-        self.getSquare(2, 6).setPiece(Pawn("white", 2, 6))
-        self.getSquare(3, 6).setPiece(Pawn("white", 3, 6))
-        self.getSquare(4, 6).setPiece(Pawn("white", 4, 6))
-        self.getSquare(5, 6).setPiece(Pawn("white", 5, 6))
-        self.getSquare(6, 6).setPiece(Pawn("white", 6, 6))
-        self.getSquare(7, 6).setPiece(Pawn("white", 7, 6))
+        self.getSquare(0, 7).addPiece('white', 'rook')
+        self.getSquare(1, 7).addPiece('white', 'knight')
+        self.getSquare(2, 7).addPiece('white', 'bishop')
+        self.getSquare(3, 7).addPiece('white', 'king')
+        self.getSquare(4, 7).addPiece('white', 'queen')
+        self.getSquare(5, 7).addPiece('white', 'bishop')
+        self.getSquare(6, 7).addPiece('white', 'knight')
+        self.getSquare(7, 7).addPiece('white', 'rook')
+        self.getSquare(0, 6).addPiece('white', 'pawn')
+        self.getSquare(1, 6).addPiece('white', 'pawn')
+        self.getSquare(2, 6).addPiece('white', 'pawn')
+        self.getSquare(3, 6).addPiece('white', 'pawn')
+        self.getSquare(4, 6).addPiece('white', 'pawn')
+        self.getSquare(5, 6).addPiece('white', 'pawn')
+        self.getSquare(6, 6).addPiece('white', 'pawn')
+        self.getSquare(7, 6).addPiece('white', 'pawn')
 
         # Black
-        self.getSquare(0, 0).setPiece(Rook("black", 0, 0))
-        self.getSquare(1, 0).setPiece(Knight("black", 1, 0))
-        self.getSquare(2, 0).setPiece(Bishop("black", 2, 0))
-        self.getSquare(3, 0).setPiece(King("black", 3, 0))
-        self.getSquare(4, 0).setPiece(Queen("black", 4, 0))
-        self.getSquare(5, 0).setPiece(Bishop("black", 5, 0))
-        self.getSquare(6, 0).setPiece(Knight("black", 6, 0))
-        self.getSquare(7, 0).setPiece(Rook("black", 7, 0))
-        self.getSquare(0, 1).setPiece(Pawn("black", 0, 1))
-        self.getSquare(1, 1).setPiece(Pawn("black", 1, 1))
-        self.getSquare(2, 1).setPiece(Pawn("black", 2, 1))
-        self.getSquare(3, 1).setPiece(Pawn("black", 3, 1))
-        self.getSquare(4, 1).setPiece(Pawn("black", 4, 1))
-        self.getSquare(5, 1).setPiece(Pawn("black", 5, 1))
-        self.getSquare(6, 1).setPiece(Pawn("black", 6, 1))
-        self.getSquare(7, 1).setPiece(Pawn("black", 7, 1))
+        self.getSquare(0, 0).addPiece('white', 'rook')
+        self.getSquare(1, 0).addPiece('white', 'knight')
+        self.getSquare(2, 0).addPiece('white', 'bishop')
+        self.getSquare(3, 0).addPiece('white', 'king')
+        self.getSquare(4, 0).addPiece('white', 'queen')
+        self.getSquare(5, 0).addPiece('white', 'bishop')
+        self.getSquare(6, 0).addPiece('white', 'knight')
+        self.getSquare(7, 0).addPiece('white', 'rook')
+        self.getSquare(0, 1).addPiece('black', 'pawn')
+        self.getSquare(1, 1).addPiece('black', 'pawn')
+        self.getSquare(2, 1).addPiece('black', 'pawn')
+        self.getSquare(3, 1).addPiece('black', 'pawn')
+        self.getSquare(4, 1).addPiece('black', 'pawn')
+        self.getSquare(5, 1).addPiece('black', 'pawn')
+        self.getSquare(6, 1).addPiece('black', 'pawn')
+        self.getSquare(7, 1).addPiece('black', 'pawn')
 
     def pieceAtSquare(self, player, str_pos):
         """Board String -> Boolean
@@ -137,7 +138,8 @@ class Board(object):
                     des_pos = self.getPositionOfSquare(destination)
                     
                     if des_pos.isPositionInList(self.getBoard()[org_pos.getY()][org_pos.getX()].getPiece().getMoves()):
-                        
+                        return True
+                        """
                         if isinstance(self.getBoard()[des_pos.getY()][des_pos.getX()].getPiece(), Piece):
                             
                             if self.getBoard()[des_pos.getY()][des_pos.getX()].getPiece().getColor() == \
@@ -150,19 +152,19 @@ class Board(object):
                         
                         else:
                             return True
-                    
+                        """
                     else:
-                        # print("Piece can't move there")
+                        print("Piece can't move there")
                         return False
         
                 else:
-                    # print("Index 1 of destination,", destination, ", is not in", self.columns, "or", self.rows)
+                    print("Index 1 of destination,", destination, ", is not in", self.columns, "or", self.rows)
                     return False
             else:
-                # print("Index 0 of destination,", destination, ", is not in", self.columns, "or", self.rows)
+                print("Index 0 of destination,", destination, ", is not in", self.columns, "or", self.rows)
                 return False
         else:
-            # print("destination,", destination, ", is bigger than 3 characters")
+            print("destination,", destination, ", is bigger than 3 characters")
             return False
 
     # Needs a method that checks str_pos
@@ -194,20 +196,3 @@ class Board(object):
         else:
             self.board[destination.getY()][destination.getX()].setPiece(piece)
             self.board[origin.getY()][origin.getX()].setPiece("--")
-
-class Square(object):
-    def __init__(self, x, y):
-        self.piece = "--"
-        self.position = Position(x, y)
-    def getPiece(self):
-        return self.piece
-    def setPiece(self, piece):
-        self.piece = piece
-    def getPosition(self):
-        return self.position
-    def setPosition(self, newPosition):
-        self.position = newPosition
-    def __str__(self):
-        if isinstance(self.piece, Piece):
-            return self.piece.__str__()
-        return self.piece
