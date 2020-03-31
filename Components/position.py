@@ -22,6 +22,6 @@ class Position(object):
     def isPositionInList(self, list_of_positions):
         """Posistion [List-of Positions] -> Boolean, Return true if self is in list_of_poitions"""
         for pos in list_of_positions:
-            if self == pos:
+            if self.getX() == pos.getX() and self.getY() == pos.getY():
                 return True
         return False
