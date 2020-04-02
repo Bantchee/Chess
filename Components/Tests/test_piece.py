@@ -1,5 +1,5 @@
 import unittest
-from .. import pieces
+from .. import piece
 from .. import position
 
 class TestPieces(unittest.TestCase):
