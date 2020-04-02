@@ -1,6 +1,6 @@
 from .position import Position
-from .pieces import *
-from .square import *
+from .piece import Piece
+from .square import Square
 
 class Board(object):
     columns = "abcdefgh"
@@ -15,27 +15,32 @@ class Board(object):
 
     def getBoard(self):
         return self.board
+    
     def getCapturedPieces(self, color):
         if color == 'white':
             return self.white_captured_pieces
         else:
             return self.black_captured_pieces
+    
     def addCapturedPiece(self, piece):
         if piece.getColor() == 'white':
             self.getCapturedPieces('white').append(piece.__str__())
         else:
             self.getCapturedPieces('black').append(piece.__str__())
+    
     def removeCapturedPiece(self, player, piece):
         if player == 'white':
             self.getCapturedPieces(player).remove(piece)
         else:
             self.getCapturedPieces(player).remove(piece)
+    
     def getSquare(self, x, y):
         return self.board[y][x]
 
     def resetBoard(self):
         """
-        -> [Mutates self.board]
+        Board -> [Mutates self.board]
+        
         resest the board.
         """
         self.board = []
@@ -65,14 +70,14 @@ class Board(object):
         self.getSquare(7, 6).addPiece('white', 'pawn')
 
         # Black
-        self.getSquare(0, 0).addPiece('white', 'rook')
-        self.getSquare(1, 0).addPiece('white', 'knight')
-        self.getSquare(2, 0).addPiece('white', 'bishop')
-        self.getSquare(3, 0).addPiece('white', 'king')
-        self.getSquare(4, 0).addPiece('white', 'queen')
-        self.getSquare(5, 0).addPiece('white', 'bishop')
-        self.getSquare(6, 0).addPiece('white', 'knight')
-        self.getSquare(7, 0).addPiece('white', 'rook')
+        self.getSquare(0, 0).addPiece('black', 'rook')
+        self.getSquare(1, 0).addPiece('black', 'knight')
+        self.getSquare(2, 0).addPiece('black', 'bishop')
+        self.getSquare(3, 0).addPiece('black', 'king')
+        self.getSquare(4, 0).addPiece('black', 'queen')
+        self.getSquare(5, 0).addPiece('black', 'bishop')
+        self.getSquare(6, 0).addPiece('black', 'knight')
+        self.getSquare(7, 0).addPiece('black', 'rook')
         self.getSquare(0, 1).addPiece('black', 'pawn')
         self.getSquare(1, 1).addPiece('black', 'pawn')
         self.getSquare(2, 1).addPiece('black', 'pawn')
@@ -84,6 +89,7 @@ class Board(object):
 
     def pieceAtSquare(self, player, str_pos):
         """Board String -> Boolean
+        
         if str_pos is less than 3 characters,
         if 1 character in str_pos is in [1, 2, 3, 4, 5, 6, 7, 8],
         if other character in str_pos is in [a, b, c, d, e, f, g, h],
@@ -101,8 +107,7 @@ class Board(object):
             
                         if isinstance(self.board[pos.getY()][pos.getX()].getPiece(), Piece):
                             alias_piece = self.board[pos.getY()][pos.getX()].getPiece()
-                            
-                            alias_piece.setMoves(alias_piece.generateNewMoves(self))
+                            alias_piece.setMoves(alias_piece.generateMoves(self.board[pos.getY()][pos.getX()], self))
 
                             print("Piece", alias_piece, "at [" + str(pos.getX()), str(pos.getY()) + "]")
                             print("Possible moves: ", end = "")
@@ -128,7 +133,11 @@ class Board(object):
             return False
 
     def possibleMove(self, origin, destination):
-        """Board String String String -> Boolean, Return true if destination is a possible move for Piece at origin"""
+        """
+        Board String String -> Boolean
+        
+        Return true if destination is a possible move for Piece at origin
+        """
         if len(destination) < 3:
             
             if (destination[0] in self.columns) or (destination[0] in self.rows):
@@ -167,11 +176,9 @@ class Board(object):
             print("destination,", destination, ", is bigger than 3 characters")
             return False
 
-    # Needs a method that checks str_pos
-    # example input = wp, output = false
     def getPositionOfSquare(self, str_pos):
             """
-            String -> Position
+            Board String -> Position
 
             return Square object at that position in board
             """
@@ -182,17 +189,19 @@ class Board(object):
                 position = Position(self.columns.index(str_pos[1]), self.rows.index(str_pos[0]))
                 return position
 
-    def movePiece(self, player, origin, destination):
+    def movePiece(self, origin, destination):
         """
-            String Position Position -> [Mutates self.Board]
-        """
-        piece = self.board[origin.getY()][origin.getX()].getPiece()
-        piece.setPosition(destination.getX(), destination.getY())
+        Board Position Position -> [Mutates self.Board]
 
-        if isinstance(self.board[destination.getY()][destination.getX()].getPiece(), Piece):
-            self.addCapturedPiece(self.board[destination.getY()][destination.getX()].getPiece())
-            self.board[destination.getY()][destination.getX()].setPiece(piece)
-            self.board[origin.getY()][origin.getX()].setPiece("--")
+        Moves the piece at origin to destination
+        """
+        origin_square = self.getSquare(origin.getX(), origin.getY())
+        destination_square = self.getSquare(destination.getX(), destination.getY())
+
+        if isinstance(destination_square.getPiece(), Piece):
+            self.addCapturedPiece(destination_square.getPiece())
+            destination_square.setPiece(origin_square.getPiece())
+            origin_square.setPiece("--")
         else:
-            self.board[destination.getY()][destination.getX()].setPiece(piece)
-            self.board[origin.getY()][origin.getX()].setPiece("--")
+            destination_square.setPiece(origin_square.getPiece())
+            origin_square.setPiece("--")

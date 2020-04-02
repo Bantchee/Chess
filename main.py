@@ -25,7 +25,7 @@ def movementDialogue(player):
         if b.possibleMove(origin, destination):
             origin = b.getPositionOfSquare(origin)
             destination = b.getPositionOfSquare(destination)
-            b.movePiece(player, origin, destination)
+            b.movePiece(origin, destination)
             return False
 
         elif destination == 'back':

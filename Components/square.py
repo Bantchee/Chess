@@ -1,5 +1,5 @@
-from .position import *
-from .pieces import *
+from .position import Position
+from .piece import Piece
 
 class Square(object):
     def __init__(self, x, y):
@@ -23,19 +23,14 @@ class Square(object):
     def setPosition(self, newPosition):
         self.position = newPosition
 
-    def addPiece(self, color, piece):
-        if piece == 'king':
-            self.piece = King(color, self.getPosition().getX(), self.getPosition().getY())
-        elif piece == 'queen':
-            self.piece = Queen(color, self.getPosition().getX(), self.getPosition().getY())
-        elif piece == 'bishop':
-            self.piece = Bishop(color, self.getPosition().getX(), self.getPosition().getY())
-        elif piece == 'knight':
-            self.piece = Knight(color, self.getPosition().getX(), self.getPosition().getY())
-        elif piece == 'rook':
-            self.piece = Rook(color, self.getPosition().getX(), self.getPosition().getY())
-        elif piece == 'pawn':
-            self.piece = Pawn(color, self.getPosition().getX(), self.getPosition().getY())
+    def addPiece(self, color, piece_name):
+        """
+            Square String String -> [Mutates self.piece]
+        """
+        self.setPiece(Piece(color, piece_name))
 
     def removePiece(self):
-        self.setPiece == '--'
+        """
+            Square -> [Mutates self.piece]
+        """
+        self.setPiece('--')
